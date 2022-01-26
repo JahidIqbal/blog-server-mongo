@@ -15,6 +15,7 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
+
 console.log(uri);
 
 async function run() {
@@ -22,6 +23,7 @@ async function run() {
         await client.connect();
         const database = client.db("blogServer");
         const servicesCollection = database.collection("services");
+        console.log('database connected')
 
         // all api are here let's solve it
         // get services
@@ -41,8 +43,8 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-    res.send('Travel agency')
-});
+    res.send('Travel agency');
+})
 
 app.get('/hello', (req, res) => {
     res.send('Hello updated here')
