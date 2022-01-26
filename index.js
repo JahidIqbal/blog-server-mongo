@@ -42,6 +42,10 @@ run().catch(console.dir);
 
 app.get('/', (req, res) => {
     res.send('Travel agency')
+});
+
+app.get('/hello', (req, res) => {
+    res.send('Hello updated here')
 })
 
 app.listen(port, () => {
