@@ -25,7 +25,7 @@ async function run() {
         const servicesCollection = database.collection("services");
         console.log('database connected')
 
-        // all api are here 
+        // all api 
         // get services
         app.get('/services', async (req, res) => {
             const cursor = servicesCollection.find({});
