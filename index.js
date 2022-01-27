@@ -29,8 +29,22 @@ async function run() {
         // get services
         app.get('/services', async (req, res) => {
             const cursor = servicesCollection.find({});
-            const services = await cursor.toArray();
-            res.send(services);
+            const page = req.query.page;
+            const size = parseInt(req.query.size);
+            let services;
+            const count = await cursor.count();
+            if (page) {
+                services = await cursor.skip(page * size).limit(size).toArray();
+            }
+            else {
+                services = await cursor.toArray();
+            }
+
+
+            res.send({
+                count,
+                services
+            });
         })
     }
 
