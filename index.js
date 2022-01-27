@@ -5,6 +5,8 @@ require('dotenv').config();
 
 
 const app = express();
+
+
 const port = process.env.PORT || 5000;
 
 app.use(cors())
@@ -28,7 +30,7 @@ async function run() {
 
         console.log('database connected')
 
-        // all api 
+
         // get services
         app.get('/services', async (req, res) => {
             const cursor = servicesCollection.find({});
