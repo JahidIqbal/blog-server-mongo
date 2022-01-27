@@ -3,7 +3,6 @@ const cors = require('cors')
 const { MongoClient } = require('mongodb');
 require('dotenv').config();
 
-
 const app = express();
 
 
@@ -52,6 +51,13 @@ async function run() {
             });
         })
 
+
+        // add new product
+        app.post('/services', async (req, res) => {
+            const newProduct = req.body;
+            const result = await servicesCollection.insertOne(newProduct);
+            res.json(result);
+        })
 
         // ratings
         app.post('/ratings', async (req, res) => {
