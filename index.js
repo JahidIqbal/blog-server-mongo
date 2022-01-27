@@ -16,14 +16,16 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 
 
-console.log(uri);
+
 
 async function run() {
     try {
         await client.connect();
         const database = client.db("blogServer");
         const servicesCollection = database.collection("services");
+        const usersCollection = database.collection('users');
         const ratingCollection = database.collection('ratings');
+
         console.log('database connected')
 
         // all api 
@@ -62,6 +64,52 @@ async function run() {
             const ratings = await cursor.toArray();
             res.send(ratings);
         })
+
+
+
+        // post users
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+            const result = await usersCollection.insertOne(user);
+            console.log(result);
+            res.json(result);
+        })
+
+
+        // put method here
+        app.put('/users', async (req, res) => {
+            const user = req.body;
+            const filter = { email: user.email };
+            const options = { upsert: true };
+            const updateDoc = { $set: user };
+            const result = await usersCollection.updateOne(filter, updateDoc, options);
+            res.json(result);
+        });
+
+
+        // admin role here
+        app.put('/users/admin', async (req, res) => {
+            const user = req.body;
+            const filter = { email: user.email };
+            const updateDoc = { $set: { role: 'admin' } };
+            const result = await usersCollection.updateOne(filter, updateDoc);
+            res.json(result);
+
+        })
+
+        // finding specific admin by email
+        app.get('/users/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email };
+            const user = await usersCollection.findOne(query);
+            let isAdmin = false;
+            if (user?.role === 'admin') {
+                isAdmin = true;
+            }
+            res.json({ admin: isAdmin })
+        })
+
+
 
 
     }
