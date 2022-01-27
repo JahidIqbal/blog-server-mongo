@@ -46,9 +46,7 @@ app.get('/', (req, res) => {
     res.send('Travel agency');
 })
 
-app.get('/hello', (req, res) => {
-    res.send('Hello updated here')
-})
+
 
 app.listen(port, () => {
     console.log('Travel Server running on port', port)
