@@ -23,6 +23,7 @@ async function run() {
         await client.connect();
         const database = client.db("blogServer");
         const servicesCollection = database.collection("services");
+        const ratingCollection = database.collection('ratings');
         console.log('database connected')
 
         // all api 
@@ -46,6 +47,23 @@ async function run() {
                 services
             });
         })
+
+
+        // ratings
+        app.post('/ratings', async (req, res) => {
+            const rating = req.body;
+            const result = await ratingCollection.insertOne(rating);
+            res.json(result);
+        })
+
+        // get ratings
+        app.get('/ratings', async (req, res) => {
+            const cursor = ratingCollection.find({});
+            const ratings = await cursor.toArray();
+            res.send(ratings);
+        })
+
+
     }
 
     finally {
