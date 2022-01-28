@@ -76,6 +76,34 @@ async function run() {
 
 
 
+        // update rating status
+        app.put('/ratings/:id', async (req, res) => {
+            const id = req.params.id;
+            const updateStatus = req.body;
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updateDoc = { $set: { status: updateStatus.status } };
+            const result = await ratingCollection.updateOne(
+                filter,
+                updateDoc,
+                options
+            );
+            res.json(result);
+            console.log(result);
+        });
+
+
+        // delete ratings
+        app.delete('/ratings/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await ratingCollection.deleteOne(query);
+            console.log('delete order with id', result);
+            res.json(result);
+        })
+
+
+
         // post users
         app.post('/users', async (req, res) => {
             const user = req.body;
@@ -94,6 +122,8 @@ async function run() {
             const result = await usersCollection.updateOne(filter, updateDoc, options);
             res.json(result);
         });
+
+
 
 
         // admin role here
@@ -139,21 +169,7 @@ async function run() {
         })
 
 
-        // update manage status
-        app.put('/manageProducts/:id', async (req, res) => {
-            const id = req.params.id;
-            const updateStatus = req.body;
-            const filter = { _id: ObjectId(id) };
-            const options = { upsert: true };
-            const updateDoc = { $set: { status: updateStatus.status } };
-            const result = await servicesCollection.updateOne(
-                filter,
-                updateDoc,
-                options
-            );
-            res.json(result);
-            console.log(result);
-        });
+
 
 
 
