@@ -74,9 +74,7 @@ async function run() {
             res.send(ratings);
         })
 
-
-
-        // update rating status
+        // update rating status with rate
         app.put('/ratings/:id', async (req, res) => {
             const id = req.params.id;
             const updateStatus = req.body;
