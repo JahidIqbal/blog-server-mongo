@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const { MongoClient } = require('mongodb');
 require('dotenv').config();
+const ObjectId = require('mongodb').ObjectId;
 
 const app = express();
 
@@ -117,6 +118,42 @@ async function run() {
             res.json({ admin: isAdmin })
         })
 
+
+
+
+        // manage products
+        app.get('/manageProducts', async (req, res) => {
+            const cursor = servicesCollection.find({});
+            const services = await cursor.toArray();
+            res.send(services);
+        })
+
+
+        // delete manage product by id
+        app.delete('/manageProducts/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await servicesCollection.deleteOne(query);
+            console.log('delete order with id', result);
+            res.json(result);
+        })
+
+
+        // update manage status
+        app.put('/manageProducts/:id', async (req, res) => {
+            const id = req.params.id;
+            const updateStatus = req.body;
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updateDoc = { $set: { status: updateStatus.status } };
+            const result = await servicesCollection.updateOne(
+                filter,
+                updateDoc,
+                options
+            );
+            res.json(result);
+            console.log(result);
+        });
 
 
 
